@@ -1,0 +1,442 @@
+
+<MainMenu>:
+
+    BoxLayout:
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgb: [1,1,1,1]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        AnchorLayout:
+            anchor_y: 'top'
+            id: titlepage
+            canvas:
+                Color:
+                    rgb:[1,1,1,1]
+                Rectangle:
+                    size: self.size[0], (self.size[0] / 2)
+                    pos: self.pos
+                    source: 'kingslogo.png'
+                    
+        BoxLayout:
+            id: menuoptions
+            orientation: 'horizontal'
+            canvas:
+                Color:
+                    rgb: [1,1,1,1]
+                Rectangle:
+                    size:self.size
+                    pos:self.pos
+                    
+            MeatButt:
+                text: 'Settings'
+                font_size: 18
+                on_press: root.settingsbutt()
+                
+            MeatButt:
+                text: 'Start Game'
+                font_size: 18
+                on_press: root.startbutt()
+
+
+<GameScreen>:
+    color: [0.001,0.5,0.75,1]
+    font_size: 14
+    bold: True
+    
+    BoxLayout:
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgb: [1,1,1,1]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                
+        BoxLayout:
+            orientation: 'vertical'
+            id: topbar
+            
+            MeatText:
+                size_hint_y: 0.1
+                text: 'current player'
+                
+            BoxLayout:
+                orientation: 'vertical'
+
+                canvas.before:
+                    Color:
+                        rgb: [1,0.78,0,0.37,0.5]
+                    Ellipse:
+                        pos: [((self.size[0] / 2) - (topbar.size[0] * 0.15)), ((self.size[1] / 2) - (topbar.size[0] * 0.15))]
+                        size: [topbar.size[0] * 0.3, topbar.size[0] * 0.3]
+
+                canvas:
+                    Color:
+                        rgb: [1,1,1,1]
+                    Ellipse:
+                        pos: [((self.size[0] / 2) - (topbar.size[0] * 0.075)), ((self.size[1] / 2) - (topbar.size[0] * 0.075))]
+                        size: [topbar.size[0] * 0.15, topbar.size[0] * 0.15]
+                    Ellipse:
+                        id: playertag
+                        angle_start: 0
+                        angle_end: 45
+                        pos: [((self.size[0] / 2) - (topbar.size[0] * 0.15)), ((self.size[1] / 2) - (topbar.size[0] * 0.15))]
+                        size: [topbar.size[0] * 0.3, topbar.size[0] * 0.3]
+
+                MeatText:
+                    id: cardname
+                    size_hint_y: 0.1
+                    text: 'card name'
+                    on_text: rulename.text = root.profiles[root.currentprofile][str(drawbutt.currentcard[0])]
+
+                MeatText:
+                    id: rulename
+                    size_hint_y: 0.1
+                    text: 'rule name'
+                    on_text: ruledesc.text = root.rules[self.text]
+
+                MeatText:
+                    id: ruledesc
+                    text: 'rulesgohere rulesgohere rulesgohere rulesgohere rulesgohere rulesgohere rulesgohere rulesgohere rulesgohererulesgohererulesgohererulesgohererulesgohererulesgohere'
+                    text_size: (self.size[0] *0.9,self.size[1] * 0.9)
+                    padding: 30,50
+                    valign: 'middle'
+                    halign: 'center'
+
+                
+        GridLayout:
+            size_hint_y: 0.1
+            cols: 2
+
+            MeatButt:
+                id: quit
+                text: 'quit'
+                size_hint_x: 0.5
+                on_press: root.quitgame()
+            
+                
+            MeatButt:
+                id: drawbutt
+                size_hint_x: 0.5
+                text: 'draw card'
+                currentcard: [1,1]
+                on_press: self.currentcard = root.drawacard()
+                on_press: cardname.text = root.faces[root.deck.drawpile[0][0]] + ' of ' + root.suits[root.deck.drawpile[0][1]]
+
+
+
+
+<GameStart>:
+
+    BoxLayout:
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgb: [1,1,1,1]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+    GridLayout:
+        cols: 2
+
+        MeatText:
+            text: 'number of players'
+            size_hint_y: 0.1
+
+        Spinner:
+            id: numplayerspin
+            size_hint_y: 0.1
+            text: 'number of players input'
+            background_color: [0,0,0,0]
+            color: [0.001,0.5,0.75,1]
+            font_size: 14
+            bold: True
+            values: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33']
+            option_cls: root.MeatSpin
+
+        MeatText:
+            text: 'profile'
+            size_hint_y: 0.1
+
+
+        MeatText:
+            text: 'profile spinner'
+            size_hint_y: 0.1
+
+
+        GridLayout:
+            size_hint_y:0.7
+            cols: 1
+            MeatText:
+                text: '2'
+            MeatText:
+                text: '3'
+            MeatText:
+                text: '4'
+            MeatText:
+                text: '5'
+            MeatText:
+                text: '6'
+            MeatText:
+                text: '7'
+            MeatText:
+                text: '8'
+            MeatText:
+                text: '9'
+            MeatText:
+                text: '10'
+            MeatText:
+                text: 'Jack'
+            MeatText:
+                text: 'Queen'
+            MeatText:
+                text: 'King'
+            MeatText:
+                text: 'Ace'
+
+        GridLayout:
+            size_hint_y:0.7
+            cols: 1
+            MeatText:
+                text: root.profiles[root.currentprofile]['1']
+            MeatText:
+                text: root.profiles[root.currentprofile]['2']
+            MeatText:
+                text: root.profiles[root.currentprofile]['3']
+            MeatText:
+                text: root.profiles[root.currentprofile]['4']
+            MeatText:
+                text: root.profiles[root.currentprofile]['5']
+            MeatText:
+                text: root.profiles[root.currentprofile]['6']
+            MeatText:
+                text: root.profiles[root.currentprofile]['7']
+            MeatText:
+                text: root.profiles[root.currentprofile]['8']
+            MeatText:
+                text: root.profiles[root.currentprofile]['9']
+            MeatText:
+                text: root.profiles[root.currentprofile]['10']
+            MeatText:
+                text: root.profiles[root.currentprofile]['11']
+            MeatText:
+                text: root.profiles[root.currentprofile]['12']
+            MeatText:
+                text: root.profiles[root.currentprofile]['13']
+
+        MeatText:
+            text: 'settings'
+            size_hint_y: 0.1
+
+        MeatButt:
+            text: 'start game'
+            size_hint_y: 0.1
+            on_press: root.startgame()
+
+<SettingsScreen>:
+    
+    background_color: [0,0,0,0]
+    color: [0.001,0.5,0.75,1]
+    font_size: 14
+    bold: True
+    BoxLayout:
+        canvas:
+            Color:
+                rgb: [1,1,1,1]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                
+    BoxLayout:
+        orientation: 'vertical'
+
+
+        canvas:
+            Color:
+                rgb: [1,0.9,0.3,1]
+            Line:
+                points: root.x + 10,(root.height * (0.55)) ,root.width - 10,(root.height * (0.55)) 
+                width: 5
+            Line:
+                points: root.x + 10,(root.height * (0.45)) ,root.width - 10,(root.height * (0.45)) 
+                width: 5
+                
+        
+        GridLayout:
+            id: marriages
+            size_hint_y:0.45
+            cols: 2
+            MeatText:
+                text: '2'
+            MeatText:
+                id: mt1
+                text: root.profiles[root.currentprofile]['1']
+                tupdate: root.profiles[root.currentprofile]['1']
+            MeatText:
+                text: '3'
+                tupdate: self.text
+            MeatText:
+                id: mt2
+                text: root.profiles[root.currentprofile]['2']
+                tupdate: root.profiles[root.currentprofile]['2']
+            MeatText:
+                text: '4'
+                tupdate: self.text
+            MeatText:
+                id: mt3
+                text: root.profiles[root.currentprofile]['3']
+                tupdate: root.profiles[root.currentprofile]['3']
+            MeatText:
+                text: '5'
+                tupdate: self.text
+            MeatText:
+                id: mt4
+                text: root.profiles[root.currentprofile]['4']
+                tupdate: root.profiles[root.currentprofile]['4']
+            MeatText:
+                text: '6'
+                tupdate: self.text
+            MeatText:
+                id: mt5
+                text: root.profiles[root.currentprofile]['5']
+                tupdate: root.profiles[root.currentprofile]['5']
+            MeatText:
+                text: '7'
+                tupdate: self.text
+            MeatText:
+                id: mt6
+                text: root.profiles[root.currentprofile]['6']
+                tupdate: root.profiles[root.currentprofile]['6']
+            MeatText:
+                text: '8'
+                tupdate: self.text
+            MeatText:
+                id: mt7
+                text: root.profiles[root.currentprofile]['7']
+                tupdate: root.profiles[root.currentprofile]['7']
+            MeatText:
+                text: '9'
+                tupdate: self.text
+            MeatText:
+                id: mt8
+                text: root.profiles[root.currentprofile]['8']
+                tupdate: root.profiles[root.currentprofile]['8']
+            MeatText:
+                text: '10'
+                tupdate: self.text
+            MeatText:
+                id: mt9
+                text: root.profiles[root.currentprofile]['9']
+                tupdate: root.profiles[root.currentprofile]['9']
+            MeatText:
+                text: 'Jack'
+                tupdate: self.text
+            MeatText:
+                id: mt10
+                text: root.profiles[root.currentprofile]['10']
+                tupdate: root.profiles[root.currentprofile]['12']
+            MeatText:
+                text: 'Queen'
+                tupdate: self.text
+            MeatText:
+                id: mt11
+                text: root.profiles[root.currentprofile]['11']
+                tupdate: root.profiles[root.currentprofile]['11']
+            MeatText:
+                text: 'King'
+                tupdate: self.text
+            MeatText:
+                id: mt12
+                text: root.profiles[root.currentprofile]['12']
+                tupdate: root.profiles[root.currentprofile]['12']
+            MeatText:
+                text: 'Ace'
+                tupdate: self.text
+            MeatText:
+                id: mt13
+                text: root.profiles[root.currentprofile]['13']
+                tupdate: root.profiles[root.currentprofile]['13']
+                
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1,0.1)
+
+            Spinner:
+                id: cardspin
+                text: 'select card'
+                values: ('2','3','4','5','6','7','8','9','10','Jack','King','Queen','Ace')
+                size_hint:(0.25,1)
+                background_color: [0,0,0,0]
+                color: [0.001,0.5,0.75,1]
+                font_size: 14
+                bold: True
+                on_text: rulespin.text = root.profiles[root.currentprofile][root.facevalues[self.text]]
+                option_cls: root.MeatSpin
+
+
+            Spinner:
+                id: rulespin
+                text: ''
+                values: root.ruleslist
+                background_color: [0,0,0,0]
+                color: [0.001,0.5,0.75,1]
+                font_size: 14
+                bold: True
+                size_hint: (0.75,1)
+                on_text: ruledesc.text = root.rules[self.text]
+                on_text: root.saveruletoprofile(profile = root.currentprofile,card = root.facevalues[cardspin.text],rule = self.text)
+                on_text: mt1.text = root.profiles[root.currentprofile]['1']
+                on_text: mt2.text = root.profiles[root.currentprofile]['2']
+                on_text: mt3.text = root.profiles[root.currentprofile]['3']
+                on_text: mt4.text = root.profiles[root.currentprofile]['4']
+                on_text: mt5.text = root.profiles[root.currentprofile]['5']
+                on_text: mt6.text = root.profiles[root.currentprofile]['6']
+                on_text: mt7.text = root.profiles[root.currentprofile]['7']
+                on_text: mt8.text = root.profiles[root.currentprofile]['8']
+                on_text: mt9.text = root.profiles[root.currentprofile]['9']
+                on_text: mt10.text = root.profiles[root.currentprofile]['10']
+                on_text: mt11.text = root.profiles[root.currentprofile]['11']
+                on_text: mt12.text = root.profiles[root.currentprofile]['12']
+                on_text: mt13.text = root.profiles[root.currentprofile]['13']
+                option_cls: root.MeatSpin
+
+        MeatText:
+            id: ruledesc
+            size_hint: (1, 0.35)
+            max_lines: 5
+            text_size: (self.size[0] *0.9,self.size[1] * 0.9)
+            valign: 'middle'
+            halign: 'center'
+            text: 'pick a card to view rule settings'
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1, 0.1)
+
+            MeatButt:
+                size_hint:(0.5,1)
+                text:'load settings'
+                bold: True
+
+            MeatButt:
+                size_hint: (0.5,1)
+                text: 'save settings'
+                on_press: root.saveprofile()
+                bold: True
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.05
+            
+            MeatButt:
+                text: 'main menu'
+                on_press: root.menubutt()
+
+            MeatButt:
+                text: 'game start'
+                on_press: root.startbutt()
+
