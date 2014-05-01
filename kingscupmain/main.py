@@ -52,88 +52,91 @@ from kivy.uix.spinner import SpinnerOption
 from kivy.factory import Factory
 from kivy.graphics import Color
 from kivy.base import runTouchApp
-
+from kivy.config import Config
 
 settings = JsonStore('settings.json')
 
-settings['rules'] = {
-        'waterfall' : 'The current player starts drinking. Everyone must begin drinking when the person to their right begins, and may only stop when the person to their right puts down their glass.',
-        'give 1': 'Current player hands out a drink',
-        'give 2' : 'Current player hands out 2 drinks as they choose',
-        'give 3' : 'Current player hands out 3 drinks as they choose',
-        'reach for the sky' : 'All players put a hand up in the air.  Last one to do so takes a drink',
-        'touch the table' : 'All players put a hand on the table (or floor).  Last one to do so takes a drink.',
-        'touch your nose' : 'All players touch their noses.  Last one to do so must take a drink.',
-        'pick a mate' : 'Current player picks a "mate".  Any time current player drinks for the rest of the game, mate must join them in drinking.',
-        'going on a picnic' : 'We\'re going on an alphabetical picnic! Current player brings something beginning with \'A\'. Player to the left repeats this and adds something beginning with \'B\'.  This continues until alphabet is exhausted (everybody drinks) or someone screws up (that player drinks).',
-        'make a rule' : 'Current player makes a rule, which will be in effect until the end of the game.  Internet points for more ridiculous rules.',
-        'guys drink' : 'All players with a Y chromosome drink',
-        'girls drink' : 'All players the same gender as their mothers drink',
-        'social' : 'All players, regardless of race, gender, or creed, drink.',
-        'nickname' : 'Current player assigns a nickname to any other player.  Any time that player is referred to as anything other than said nickname the offender must drink.',
-        'spelling bee' : 'Current chooses a word and picks someone who must spell it.  If they succeed, current player drinks.  If they fail, they must drink (and reattend primary school).',
-        'hot seat' : 'Current player is in the hot seat!  All other players ask them one question (the more intrusive and personal the better).  For each question, they either answer or drink.',
-        'most likely to' : 'Current player picks a \'most likely to\' (become a crazy cat person, puke tonight, date their sibling).  All players point to the person they believe is most likely to do this thing - then everyone drinks an amount equal to the fingers pointing at them.',
-        'international house' : 'Each player adopts an accent (not their own / native accent) for the rest of the game.  Any player to break character must drink (but may resume normal speech.)',
-        'reverse rotation' : 'Play reverses order.',
-        'slow motion' : 'Welcome to the Matrix!  All players move at half speed, and the first to break the momentum drinks.',
-        'staring contest' : 'Current player picks someone and a staring contest begins.  First to break eye contact must drink.  Play may continue, but does not end the staring contest (only the shame of failure can do that).',
-        'moose' : 'All players make moose antlers with their hands.  Last to do so drinks.',
-        'all hail captain dickhead' : 'Current player is now Captain Dickhead!  You may make up any rules you like, at any time, with no restrictions.  These rules are in effect until the next Captain is chosen, at which time they expire.',
-        '7 is fuck you' : 'Starting with the current player, players count in sequence from one.  Any time a number that\'s a multiple of seven is called, it must be replaced with \'fuck you\'.  First to screw up drinks.  Internet points for going fast.',
-        'snake eyes' : 'Current player has the magic snake eyes!  Gazing directly into these eyes for the rest of the game means you must drink.',
-        'never have i ever' : 'All players hold up three fingers.  Starting with current player and continuing to the left, players state something they have never done; any players that have done this lower a finger.  First person to drop all three drinks.',
-        'thrift tranny' : 'All players exchange an article of clothing with a member of the opposite sex.  No trading back; all outgoing articles must be your own. (If there is a gender inbalance, some players may opt out by taking a drink.)',
-        'shuffle' : 'All players take new seats before play continues.  Play resumes to the left of the current player.',
-        'chinese fire drill' : 'All players run once around the table and sit in the next seat down from them (the seat to the left of their original seat.) Last to sit down drinks, and play continues to the left of the current player (they do not go twice).',
-        'strip' : 'All players remove an article of clothing.  Hats, jewelry, and watches do not count.  Shoes, socks, and any other \'paired\' items must be removed together (as if they were one item).',
-        'jackass' : 'Hee-Haw! Current player is now the Jackass, and must drink any time another player drinks (drink does not stack with \'everybody drinks\' rules).',
-        'questions' : 'Current player asks a player of their choosing a question.  That player turns to someone else and asks another question - this continues until someone screws up (answers a question or makes a statement in the form of a question).  The offending player drinks.',
-        'categories' : 'Current player picks a category (i.e. makes of car, beers, sexual positions).  Starting with the current player and continuing left, players name things in that category until someone screws up (repeats something said before, says something not in that category, can\'t think of something). Offending player drinks.',
-        'question master' : 'Current player is now the Question Master!  Any time the Q.M. asks another player a question, they must drink if they answer it.',
-        'kings cup' : 'Current player adds their drink to the King\'s Cup in the middle.',
-        'magic thumb' : 'Current player\'s thumb is now imbued with the power to compel others! Any time your thumb touches the table, others must place their thumb on the table, and the last one to do so must drink.' 
-        }
 
-print('settings has  %s  entries'%len(settings)) 
-dct = settings['rules']
-print('rules in settings has %s entries'%len(dct))
+settings['general'] = {'current profile' : '1', 'number of players' : 8}
 
-settings['profiles'] = {'1' : {'1':'moose',
-                            '2':'questions',
-                            '3':'slow motion',
-                            '4':'all hail captain dickhead',
-                            '5':'guys drink',
-                            '6':'girls drink',
-                            '7':'social',
-                            '8':'nickname',
-                            '9':'international house',
-                            '10':'magic thumb',
-                            '11':'waterfall',
-                            '12':'question master',
-                            '13':'kings cup'}}
+settings['playernames'] = {}
 
-prf = settings['profiles']
+if 'rules' in settings:
 
-print('profiles in settings has %s entries'%len(prf))
-print('profile 1 in settings has %s entries'%len(prf['1']))
+    print 'RULES FOUND IN SETTINGS'
 
-settings['general'] = {'current profile' : '1'}
+else:
 
-print('call for the current profile returns %s'%settings['general']['current profile'])
+    print'RULES NOT FOUND IN SETTINGS, SETTING THE SETTINGS LOLOLOLOLOLOL'
 
-print('TESTING PROFILE KEYS...')
-for i in settings['profiles'][settings['general']['current profile']].keys():
-    print('kv pair = %s'%i)
 
-print('TESTING PROFILE VALUES...')
-for i in settings['profiles'][settings['general']['current profile']]:
-    print settings['profiles'][settings['general']['current profile']][i]
+    settings['rules'] = {
+            'waterfall' : 'The current player starts drinking. Everyone must begin drinking when the person to their right begins, and may only stop when the person to their right puts down their glass.',
+            'give 1': 'Current player hands out a drink',
+            'give 2' : 'Current player hands out 2 drinks as they choose',
+            'give 3' : 'Current player hands out 3 drinks as they choose',
+            'reach for the sky' : 'All players put a hand up in the air.  Last one to do so takes a drink',
+            'touch the table' : 'All players put a hand on the table (or floor).  Last one to do so takes a drink.',
+            'touch your nose' : 'All players touch their noses.  Last one to do so must take a drink.',
+            'pick a mate' : 'Current player picks a "mate".  Any time current player drinks for the rest of the game, mate must join them in drinking.',
+            'going on a picnic' : 'We\'re going on an alphabetical picnic! Current player brings something beginning with \'A\'. Player to the left repeats this and adds something beginning with \'B\'.  This continues until alphabet is exhausted (everybody drinks) or someone screws up (that player drinks).',
+            'make a rule' : 'Current player makes a rule, which will be in effect until the end of the game.  Internet points for more ridiculous rules.',
+            'guys drink' : 'All players with a Y chromosome drink',
+            'girls drink' : 'All players the same gender as their mothers drink',
+            'social' : 'All players, regardless of race, gender, or creed, drink.',
+            'nickname' : 'Current player assigns a nickname to any other player.  Any time that player is referred to as anything other than said nickname the offender must drink.',
+            'spelling bee' : 'Current chooses a word and picks someone who must spell it.  If they succeed, current player drinks.  If they fail, they must drink (and reattend primary school).',
+            'hot seat' : 'Current player is in the hot seat!  All other players ask them one question (the more intrusive and personal the better).  For each question, they either answer or drink.',
+            'most likely to' : 'Current player picks a \'most likely to\' (become a crazy cat person, puke tonight, date their sibling).  All players point to the person they believe is most likely to do this thing - then everyone drinks an amount equal to the fingers pointing at them.',
+            'international house' : 'Each player adopts an accent (not their own / native accent) for the rest of the game.  Any player to break character must drink (but may resume normal speech.)',
+            'reverse rotation' : 'Play reverses order.',
+            'slow motion' : 'Welcome to the Matrix!  All players move at half speed, and the first to break the momentum drinks.',
+            'staring contest' : 'Current player picks someone and a staring contest begins.  First to break eye contact must drink.  Play may continue, but does not end the staring contest (only the shame of failure can do that).',
+            'moose' : 'All players make moose antlers with their hands.  Last to do so drinks.',
+            'all hail captain dickhead' : 'Current player is now Captain Dickhead!  You may make up any rules you like, at any time, with no restrictions.  These rules are in effect until the next Captain is chosen, at which time they expire.',
+            '7 is fuck you' : 'Starting with the current player, players count in sequence from one.  Any time a number that\'s a multiple of seven is called, it must be replaced with \'fuck you\'.  First to screw up drinks.  Internet points for going fast.',
+            'snake eyes' : 'Current player has the magic snake eyes!  Gazing directly into these eyes for the rest of the game means you must drink.',
+            'never have i ever' : 'All players hold up three fingers.  Starting with current player and continuing to the left, players state something they have never done; any players that have done this lower a finger.  First person to drop all three drinks.',
+            'thrift tranny' : 'All players exchange an article of clothing with a member of the opposite sex.  No trading back; all outgoing articles must be your own. (If there is a gender inbalance, some players may opt out by taking a drink.)',
+            'shuffle' : 'All players take new seats before play continues.  Play resumes to the left of the current player.',
+            'chinese fire drill' : 'All players run once around the table and sit in the next seat down from them (the seat to the left of their original seat.) Last to sit down drinks, and play continues to the left of the current player (they do not go twice).',
+            'strip' : 'All players remove an article of clothing.  Hats, jewelry, and watches do not count.  Shoes, socks, and any other \'paired\' items must be removed together (as if they were one item).',
+            'jackass' : 'Hee-Haw! Current player is now the Jackass, and must drink any time another player drinks (drink does not stack with \'everybody drinks\' rules).',
+            'questions' : 'Current player asks a player of their choosing a question.  That player turns to someone else and asks another question - this continues until someone screws up (answers a question or makes a statement in the form of a question).  The offending player drinks.',
+            'categories' : 'Current player picks a category (i.e. makes of car, beers, sexual positions).  Starting with the current player and continuing left, players name things in that category until someone screws up (repeats something said before, says something not in that category, can\'t think of something). Offending player drinks.',
+            'question master' : 'Current player is now the Question Master!  Any time the Q.M. asks another player a question, they must drink if they answer it.',
+            'kings cup' : 'Current player adds their drink to the King\'s Cup in the middle.',
+            'magic thumb' : 'Current player\'s thumb is now imbued with the power to compel others! Any time your thumb touches the table, others must place their thumb on the table, and the last one to do so must drink.' 
+            }
 
-print('TESTING PROFILE 1...')
-for i in settings['profiles']['1']:
-    print settings['profiles']['1'][i]
+    settings['profiles'] = {'1' : {'1':'moose',
+                                '2':'questions',
+                                '3':'slow motion',
+                                '4':'all hail captain dickhead',
+                                '5':'guys drink',
+                                '6':'girls drink',
+                                '7':'social',
+                                '8':'nickname',
+                                '9':'international house',
+                                '10':'magic thumb',
+                                '11':'waterfall',
+                                '12':'question master',
+                                '13':'kings cup'}}
 
+
+currentprofile = '1'
+
+#players business to follow
+
+players = []
+
+print 'PRINTING SETTINGS'
+
+print settings
+
+for i in settings:
+    print i
+    print settings[i]
 
 Builder.load_file('kingscup.kv')
 
@@ -152,6 +155,7 @@ class MainMenu(Screen):
 
 
 class GameStart(Screen):
+
     settings = JsonStore('settings.json')
 
     rules = settings['rules']
@@ -159,23 +163,58 @@ class GameStart(Screen):
     profiles = settings['profiles']
 
     currentprofile = settings['general']['current profile']
+
+    def setplayers(self,number,*args):
+        settings['general']['number of players'] = number
+        print 'PLAYERS SET TO' + str(settings['general']['number of players'])
+
+    def grp(self, card, *args):
+        return settings['profiles'][settings['general']['current profile']][card]
     
     class MeatSpin(SpinnerOption):
         background_color = [1,1,1,0.35]
         color = [0.001,0.5,0.75,1]
         
     def startgame(*args):
+        sm.current = 'playerscreen'
+
+    def navsettings(*args):
+        sm.current = 'settingsscreen'
+
+ 
+
+class PlayerScreen(Screen):
+
+    playiter = 1
+
+    def rotwheel1(self, *args):
+        print 'DRAWING playwheel WITH' + str(settings['general']['number of players']) + 'SEGMENTS'
+        return ((self.playiter - 1) * (360 / settings['general']['number of players']))
+
+    def rotwheel2(self, *args):
+        return (self.playiter * (360 / settings['general']['number of players']))
+
+    def enterplayer(self, number, name, *args):
+        playlist = settings['playernames']
+        playlist[str(number)] = str(name)
+        settings['playernames'] = playlist
+        print 'player ' + str(number) + 'added as ' + str(name)
+
+    def startgame(*args):
         sm.current = 'gamescreen'
-        
 
+    def iterplay(self, *args):
+        if self.playiter <= settings['general']['number of players']: 
+            self.playiter +=1
+
+        else: 
+            startgame()
+       
 class GameScreen(Screen):
-    settings = JsonStore('settings.json')
 
-    rules = settings['rules']
-
-    profiles = settings['profiles']
-
-    currentprofile = settings['general']['current profile']
+    def getrule(self, name, *args):
+        rul = settings['rules']
+        return rul[name]
 
     suits = {1:'spades',
              2:'clubs',
@@ -219,18 +258,9 @@ class GameScreen(Screen):
         ##WHAT DO I DO HEEEEERE?
         grflmrghhbr = 1
 
-    dropdown = DropDown()
-    menubutton = Button(text = 'menu', size_hint_y=None,height=44)
-    menubutton.bind(on_release = lambda menubutton:dropdown.select(menubutton.text))
-    dropdown.add_widget(menubutton)
-    quitbutton = Button(text = 'quit', size_hint_y=None,height=44)
-    quitbutton.bind(on_release=lambda quitbutton: dropdown.select(quitbutton.text))
-    dropdown.add_widget(quitbutton)
-    ddmain = Button(text = 'menu', size_hint=(None,None))
-    ddmain.bind(on_release = dropdown.open)
-    dropdown.bind(on_select=lambda instance, x: setattr(ddmain, 'text', x))
-
-
+    def grp(self, card, *args):
+        print 'Getting ' + str(card) + ' rule from profile ' + str(settings['general']['current profile'])
+        return settings['profiles'][settings['general']['current profile']][card]
 
     deck = Deck()
     currentcard = [1,5]
@@ -251,13 +281,20 @@ class GameScreen(Screen):
 
 class SettingsScreen(Screen):
 
-    settings = JsonStore('settings.json')
+    def getrule(self, name, *args):
+        rul = settings['rules']
+        return rul[name]
 
-    rules = settings['rules']
+    #get rule from profile
+    def grp(self, card, *args):
+        return settings['profiles'][settings['general']['current profile']][card]
 
-    profiles = settings['profiles']
-
-    currentprofile = settings['general']['current profile']
+    #set rule to profile
+    def srp(self, card, rule, *args):
+        print ('SAVING RULE %s' %rule)
+        settings['profiles'][settings['general']['current profile']][card] = rule
+        print  'Rule is now: '
+        print settings['profiles'][settings['general']['current profile']][card]
 
     facevalues = {
         '2':'1',
@@ -279,31 +316,7 @@ class SettingsScreen(Screen):
         sm.current = 'mainmenu'
 
     def startbutt(*args):
-        sm.current = 'gamestart'
-
-    def saveruletoprofile(self, profile, card, rule, *args):
-        self.profiles[profile][card] = rule
-
-    def saveprofile(self, *args):
-        setme = JsonStore('settings.json')
-        print('TESTING self.profiles')
-        print(self.profiles)
-        print('KEY / VALUE PAIRS...')
-        for i in self.profiles:
-            print i
-            print self.profiles[i]
-        print('TESTING setme')
-        print(setme)
-        for i in setme:
-            print i
-            print setme[i]
-        print('APPLYING self.profiles TO setme')
-        setme['profiles'] = self.profiles
-        print('RETESTING setme')
-        print(setme)
-        for i in setme:
-            print i
-            print setme[i]        
+        sm.current = 'gamestart'  
 
     deck = Deck()
 
@@ -358,7 +371,9 @@ class MeatText(Label):
         self.font_size = 14
         self.bold = True
         super(MeatText, self).__init__(**kwargs)
-    tupdate = ''
+    def update_self(self,*args):
+        print 'updating label textures...'
+        super(MeatText, self).texture_update(*args)
 
 
 class MeatButt(Button):
@@ -375,11 +390,16 @@ sm.add_widget(GameScreen(name = 'gamescreen'))
 sm.add_widget(GameStart(name = 'gamestart'))
 sm.add_widget(SettingsScreen(name = 'settingsscreen'))
 sm.add_widget(MainMenu(name = 'mainmenu'))
+sm.add_widget(PlayerScreen(name = 'playerscreen'))
 sm.current = 'mainmenu'
 
 class Play(App):
+
+    def __init__(self,**kwargs):
+        super(Play, self).__init__(**kwargs)
+
     def build(self):
         return sm
-
+ 
 if __name__ == '__main__':
     Play().run()
